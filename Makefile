@@ -1,5 +1,3 @@
-.PHONY: deps lint test run docker_build docker_run
-
 deps:
 	pip install -r requirements.txt; \
 	pip install -r test_requirements.txt
@@ -7,11 +5,12 @@ deps:
 lint:
 	flake8 hello_world test
 
-test:
-	PYTHONPATH=. pytest --verbose -s
-
 run:
 	python main.py
+
+.PHONY: test docker_build docker_run
+test:
+	PYTHONPATH=. py.test --verbose -s
 
 docker_build:
 	docker build -t hello-world-printer .
