@@ -3,17 +3,19 @@ version: 2.1
 jobs:
   build-and-test:
     docker:
-      - image: cimg/python:3.10  
+      - image: cimg/python:3.10
     steps:
       - checkout
       - run:
-          name: Install dependencies
+          name: Upgrade pip and install dependencies
           command: |
+            python -m pip install --upgrade pip
             pip install -r requirements.txt
             pip install -r test_requirements.txt
       - run:
-          name: Run tests
-          command: pytest --junitxml=junit.xml
+          name: Run tests with PYTHONPATH
+          command: |
+            PYTHONPATH=. pytest --junitxml=junit.xml
       - store_test_results:
           path: junit.xml
 
