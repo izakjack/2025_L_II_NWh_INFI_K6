@@ -1,5 +1,8 @@
 version: 2.1
 
+machine:
+  image: ubuntu-2204:2024.01.2
+
 jobs:
   build-and-test:
     docker:
@@ -19,7 +22,19 @@ jobs:
       - store_test_results:
           path: junit.xml
 
+  docker_build:
+    machine:
+      image: ubuntu-2204:2024.01.2
+    steps:
+      - checkout
+      - run:
+          name: Build Docker image
+          command: make docker_build
+
 workflows:
   basic:
     jobs:
       - build-and-test
+      - docker_build:
+          requires:
+            - build-and-test
